@@ -7,10 +7,12 @@ import (
 
 func TestTimeMarshalJSON(t *testing.T) {
 	test := func(timeStr string, j string) {
-		tm, err := time.Parse(time.RFC3339, timeStr)
+		parsed, err := time.Parse(time.RFC3339, timeStr)
 		if err != nil {
 			t.Fatal(err)
 		}
+
+		tm := Time(parsed)
 
 		str, err := tm.MarshalJSON()
 		if err != nil {
@@ -22,5 +24,5 @@ func TestTimeMarshalJSON(t *testing.T) {
 		}
 	}
 
-	test("2016-10-09T10:00:00Z09:00", `{"2016-10-09T01:00:00Z"}`)
+	test("2016-10-09T10:00:00+09:00", `"2016-10-09T01:00:00Z"`)
 }
