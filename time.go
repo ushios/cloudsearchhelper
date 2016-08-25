@@ -7,7 +7,7 @@ import (
 
 const (
 	// DateFormat for cloudsearch date type
-	DateFormat = "2006-01-02T15:04:05Z"
+	DateFormat = time.RFC3339
 )
 
 // Time for cloudsearch indices
