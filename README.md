@@ -26,6 +26,8 @@ Usage
 Cloudsearch date field's format using RFC3339 ([see detail](https://docs.aws.amazon.com/ja_jp/cloudsearch/latest/developerguide/configuring-index-fields.html)).
 This `Time` return UTC RFC3339 string when MarshalJSON.
 
+example [here](https://github.com/ushios/cloudsearchhelper/blob/master/examples/time_test.go#L16-L28)
+
 ```go
 now, _ := time.Parse(time.RFC3339, "2006-01-02T15:04:05+07:00")
 
@@ -39,4 +41,3 @@ j, _ := json.Marshal(e)
 fmt.Println(string(j))
 // Output: {"Name":"This is some event","StartAt":"2006-01-02T08:04:05Z"}
 ```
-example [here]()
