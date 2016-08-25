@@ -27,10 +27,16 @@ Cloudsearch date field's format using RFC3339 ([see detail](https://docs.aws.ama
 This `Time` return UTC RFC3339 string when MarshalJSON.
 
 ```go
+type Event struct {
+	Name  string
+	Start cloudsearchhelper.Time
+}
 
-t := cloudsearchhelper.Time(time.Now())
+e := Event{
+ 	Name : "game show",
+ 	Start : time.Now(),
+}
 
-j, _ := json.MarshalJSON(t)
-
-fmt.Println(string(j)) // "2006-01-02T15:04:05Z"
+j, _ := json.MarshalJSON(e)
+fmt.Println(string(j)) // The Start json value(UTC) -> "2006-01-02T15:04:05Z"
 ```
