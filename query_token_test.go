@@ -42,3 +42,41 @@ func TestNearNotQueryString(t *testing.T) {
 		Value:    "some title",
 	}, `(near  field='title'  distance=4  'some title' )`)
 }
+
+func TestPrefixQueryString(t *testing.T) {
+	test := func(p Prefix, e string) {
+		q := p.QueryString()
+
+		if q != e {
+			t.Errorf("%v query string expected (%s) but (%s)", p, e, q)
+		}
+	}
+
+	test(Prefix{
+		Boost: 1,
+		Field: "title",
+		Value: "some title",
+	}, `(prefix  field='title'  'some title' )`)
+
+	test(Prefix{
+		Boost: 2,
+		Field: "title",
+		Value: "some title",
+	}, `(prefix  field='title'  boost=2  'some title' )`)
+}
+
+func TestPrefixNotQueryString(t *testing.T) {
+	test := func(p Prefix, e string) {
+		q := p.NotQueryString()
+
+		if q != e {
+			t.Errorf("%v query string expected (%s) but (%s)", p, e, q)
+		}
+	}
+
+	test(Prefix{
+		Boost: 2,
+		Field: "title",
+		Value: "some title",
+	}, `(prefix  field='title'  'some title' )`)
+}
