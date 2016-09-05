@@ -138,23 +138,49 @@ func TestPhraseNotQueryString(t *testing.T) {
 	}, `(phrase  field='title'  'some title' )`)
 }
 
-// func TestRangeQueryString(t *testing.T) {
-// 	test := func(r Range, e string) {
-// 		q := r.QueryString()
-//
-// 		if q != e {
-// 			t.Errorf("%v query string expected (%s) but (%s)", r, e, q)
-// 		}
-// 	}
-//
-// 	test(Range{
-// 		Field: "rate",
-// 		From:  1,
-// 		To:    10,
-// 	}, `(phrase  field='title'  'some title' )`)
-//
-// 	test(Range{
-// 		Field: "rate",
-// 		From:  5,
-// 	}, `(phrase  field='title'  boost=2  'some title' )`)
-// }
+func TestRangeQueryString(t *testing.T) {
+	test := func(r Range, e string) {
+		q, err := r.QueryString()
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if q != e {
+			t.Errorf("%v query string expected (%s) but (%s)", r, e, q)
+		}
+	}
+
+	test(Range{
+		Field: "rate",
+		From:  1,
+		To:    10,
+	}, `(range  field='rate' [1,10])`)
+
+	test(Range{
+		Field: "rate",
+		From:  5,
+	}, `(range  field='rate' [5,])`)
+}
+
+func TestTermQueryString(t *testing.T) {
+	test := func(r Term, e string) {
+		q, err := r.QueryString()
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if q != e {
+			t.Errorf("%v query string expected (%s) but (%s)", r, e, q)
+		}
+	}
+
+	test(Term{
+		Field: "rate",
+		Value: 1,
+	}, `(term  field='rate'  1)`)
+
+	test(Term{
+		Field: "name",
+		Value: "John",
+	}, `(term  field='name'  'John')`)
+}

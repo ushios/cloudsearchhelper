@@ -15,7 +15,9 @@ type (
 )
 
 const (
+	// Add .
 	Add Action = iota + 1
+	// Delete .
 	Delete
 )
 

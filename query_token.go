@@ -3,6 +3,8 @@ package cloudsearchhelper
 import (
 	"bytes"
 	"fmt"
+	"reflect"
+	"time"
 )
 
 // Queryer output query token
@@ -11,6 +13,10 @@ import (
 type Queryer interface {
 	QueryString() (string, error)
 	NotQueryString() (string, error)
+}
+
+type timeFormatter interface {
+	Format(string) string
 }
 
 // Near .
@@ -196,11 +202,19 @@ func (r *Range) QueryString() (string, error) {
 	// body
 	b.WriteString("[")
 	if r.From != nil {
-		b.WriteString(fmt.Sprintf("%s", r.From))
+		s, err := valueString(r.From)
+		if err != nil {
+			return "", err
+		}
+		b.WriteString(fmt.Sprintf("%s", s))
 	}
 	b.WriteString(",")
 	if r.To != nil {
-		b.WriteString(fmt.Sprintf("%s", r.To))
+		s, err := valueString(r.To)
+		if err != nil {
+			return "", err
+		}
+		b.WriteString(fmt.Sprintf("%s", s))
 	}
 	b.WriteString("]")
 
@@ -252,7 +266,11 @@ func (t *Term) QueryString() (string, error) {
 	}
 
 	// body
-	b.WriteString(fmt.Sprintf(" '%s' ", t.Value))
+	s, err := valueString(t.Value)
+	if err != nil {
+		return "", err
+	}
+	b.WriteString(fmt.Sprintf(" %s", s))
 
 	// close
 	b.WriteString(")")
@@ -284,7 +302,20 @@ func valueString(v interface{}) (string, error) {
 		return "", nil
 	}
 
-	// TODO: convert to string using driver.Valuer
+	switch v.(type) {
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+		return fmt.Sprintf("%s", fmt.Sprint(v)), nil
+	case float32, float64:
+		f := v.(float64)
+		return fmt.Sprintf("%f", f), nil
+	case string:
+		s := v.(string)
+		return fmt.Sprintf("'%s'", s), nil
+	case time.Time:
+		t := v.(timeFormatter)
+		return fmt.Sprintf("'%s'", t.Format(DateFormat)), nil
 
-	return "", fmt.Errorf("(%v) is not value", v)
+	}
+
+	return "", fmt.Errorf("(%s) is not supported", reflect.TypeOf(v))
 }

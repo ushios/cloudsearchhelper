@@ -17,15 +17,26 @@ type (
 )
 
 const (
+	// Date .
 	Date FieldType = iota
+	// DateArray .
 	DateArray
+	// Double .
 	Double
+	// DoubleArray .
 	DoubleArray
+	// Int .
 	Int
+	// IntArray .
 	IntArray
+	// LatLon .
 	LatLon
+	// Literal .
 	Literal
+	// LiteralArray .
 	LiteralArray
+	// Text .
 	Text
+	// TextArray .
 	TextArray
 )
