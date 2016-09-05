@@ -200,23 +200,11 @@ func (r *Range) QueryString() (string, error) {
 	}
 
 	// body
-	b.WriteString("[")
-	if r.From != nil {
-		s, err := valueString(r.From)
-		if err != nil {
-			return "", err
-		}
-		b.WriteString(fmt.Sprintf("%s", s))
+	body, err := r.body()
+	if err != nil {
+		return "", err
 	}
-	b.WriteString(",")
-	if r.To != nil {
-		s, err := valueString(r.To)
-		if err != nil {
-			return "", err
-		}
-		b.WriteString(fmt.Sprintf("%s", s))
-	}
-	b.WriteString("]")
+	b.WriteString(body)
 
 	// close
 	b.WriteString(")")
@@ -235,10 +223,38 @@ func (r *Range) NotQueryString() (string, error) {
 	b.WriteString(fmt.Sprintf(" field='%s' ", r.Field))
 
 	// body
-	b.WriteString(fmt.Sprintf(" [%s, %s] ", r.From, r.To))
+	body, err := r.body()
+	if err != nil {
+		return "", err
+	}
+	b.WriteString(body)
 
 	// close
 	b.WriteString(")")
+
+	return b.String(), nil
+}
+
+func (r *Range) body() (string, error) {
+	var b bytes.Buffer
+	// body
+	b.WriteString("[")
+	if r.From != nil {
+		s, err := valueString(r.From)
+		if err != nil {
+			return "", err
+		}
+		b.WriteString(fmt.Sprintf("%s", s))
+	}
+	b.WriteString(",")
+	if r.To != nil {
+		s, err := valueString(r.To)
+		if err != nil {
+			return "", err
+		}
+		b.WriteString(fmt.Sprintf("%s", s))
+	}
+	b.WriteString("]")
 
 	return b.String(), nil
 }
@@ -266,11 +282,11 @@ func (t *Term) QueryString() (string, error) {
 	}
 
 	// body
-	s, err := valueString(t.Value)
+	body, err := t.body()
 	if err != nil {
 		return "", err
 	}
-	b.WriteString(fmt.Sprintf(" %s", s))
+	b.WriteString(body)
 
 	// close
 	b.WriteString(")")
@@ -289,10 +305,25 @@ func (t *Term) NotQueryString() (string, error) {
 	b.WriteString(fmt.Sprintf(" field='%s' ", t.Field))
 
 	// body
-	b.WriteString(fmt.Sprintf(" '%s' ", t.Value))
+	body, err := t.body()
+	if err != nil {
+		return "", err
+	}
+	b.WriteString(body)
 
 	// close
 	b.WriteString(")")
+
+	return b.String(), nil
+}
+
+func (t *Term) body() (string, error) {
+	var b bytes.Buffer
+	s, err := valueString(t.Value)
+	if err != nil {
+		return "", err
+	}
+	b.WriteString(fmt.Sprintf(" %s", s))
 
 	return b.String(), nil
 }
