@@ -71,5 +71,5 @@ and := cloudsearchhelper.And(&[]cloudsearchhelper.Queryer{
 
 fmt.Println(and.QueryString())
 // Output: (and (prefix  field='category'  'movie' )(phrase  field='title'  'star' )))
-}
+
 ```
