@@ -75,3 +75,23 @@ func TestAndQuery(t *testing.T) {
 		},
 	}, `(and (near  field='price'  distance=1  '1000' )(near  field='title'  distance=2  boost=5  'シン・ゴジラ' ))`)
 }
+
+func TestNotQuery(t *testing.T) {
+	test := func(tokens []Queryer, e string) {
+		n := Not(&tokens)
+		qs, err := n.QueryString()
+		if err != nil {
+			t.Fatal(err)
+		}
+		if e != qs {
+			t.Errorf("%v's query expected (%s) but (%s)", tokens, e, qs)
+		}
+	}
+
+	test([]Queryer{
+		&Phrase{
+			Field: "title",
+			Value: "Star Wars",
+		},
+	}, `not (phrase  field='title'  'Star Wars' ))`)
+}
