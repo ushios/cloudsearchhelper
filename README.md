@@ -68,7 +68,6 @@ title := &cloudsearchhelper.Phrase{
 and := cloudsearchhelper.And(&[]cloudsearchhelper.Queryer{
 	category,
 	title,
-	or,
 })
 
 fmt.Println(and.QueryString())
