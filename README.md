@@ -19,9 +19,12 @@ Usage
 =====
 
 - [Time](#time)
+- [StructuredQuery](#StructuredQuery)
 
 
 ### Time
+
+when create documents
 
 Cloudsearch date field's format using RFC3339 ([see detail](https://docs.aws.amazon.com/ja_jp/cloudsearch/latest/developerguide/configuring-index-fields.html)).
 This `Time` return UTC RFC3339 string when MarshalJSON.
@@ -40,4 +43,33 @@ j, _ := json.Marshal(e)
 
 fmt.Println(string(j))
 // Output: {"Name":"This is some event","StartAt":"2006-01-02T08:04:05Z"}
+```
+
+### StructuredQuery
+
+
+Sorry time.Time not supported now x(
+
+example [here](https://github.com/ushios/cloudsearchhelper/blob/master/examples/query_test.go#L9-L42)
+
+```go
+category := &cloudsearchhelper.Prefix{
+	Field: "category",
+	Value: "movie",
+}
+
+title := &cloudsearchhelper.Phrase{
+	Field: "title",
+	Value: "star",
+}
+
+and := cloudsearchhelper.And(&[]cloudsearchhelper.Queryer{
+	category,
+	title,
+	or,
+})
+
+fmt.Println(and.QueryString())
+// Output: (and (prefix  field='category'  'movie' )(phrase  field='title'  'star' )))
+}
 ```

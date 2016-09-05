@@ -4,7 +4,7 @@ import "bytes"
 
 // AndQuery is token for and clause
 type AndQuery struct {
-	tokens *[]StructuredQueryTokener
+	tokens *[]Queryer
 }
 
 // QueryString .
@@ -31,7 +31,7 @@ func (a *AndQuery) NotQueryString() string {
 
 // OrQuery .
 type OrQuery struct {
-	tokens *[]StructuredQueryTokener
+	tokens *[]Queryer
 }
 
 // QueryString .
@@ -58,7 +58,7 @@ func (o *OrQuery) NotQueryString() string {
 
 // NotQuery .
 type NotQuery struct {
-	tokens *[]StructuredQueryTokener
+	tokens *[]Queryer
 }
 
 // QueryString .
@@ -84,21 +84,21 @@ func (n *NotQuery) NotQueryString() string {
 }
 
 // And .
-func And(tokens *[]StructuredQueryTokener) *AndQuery {
+func And(tokens *[]Queryer) *AndQuery {
 	return &AndQuery{
 		tokens: tokens,
 	}
 }
 
 // Or .
-func Or(tokens *[]StructuredQueryTokener) *OrQuery {
+func Or(tokens *[]Queryer) *OrQuery {
 	return &OrQuery{
 		tokens: tokens,
 	}
 }
 
 // Not .
-func Not(tokens *[]StructuredQueryTokener) *NotQuery {
+func Not(tokens *[]Queryer) *NotQuery {
 	return &NotQuery{
 		tokens: tokens,
 	}

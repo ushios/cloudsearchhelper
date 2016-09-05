@@ -3,7 +3,7 @@ package cloudsearchhelper
 import "testing"
 
 func TestQuery(t *testing.T) {
-	test := func(query StructuredQueryTokener, e string) {
+	test := func(query Queryer, e string) {
 		if e != query.QueryString() {
 			t.Errorf("%v query expected (%s) but (%s)", query, e, query.QueryString())
 		}
@@ -27,15 +27,15 @@ func TestQuery(t *testing.T) {
 		Value: "question",
 	}
 
-	o := Or(&[]StructuredQueryTokener{&title1, &title2})
-	a := And(&[]StructuredQueryTokener{&body1, o})
+	o := Or(&[]Queryer{&title1, &title2})
+	a := And(&[]Queryer{&body1, o})
 
 	test(a, `(and (prefix  field='body'  'question' )(or (prefix  field='title'  'new' )(prefix  field='title'  'word' )))`)
 
 }
 
 func TestAndQuery(t *testing.T) {
-	test := func(tokens []StructuredQueryTokener, e string) {
+	test := func(tokens []Queryer, e string) {
 		a := And(&tokens)
 
 		if e != a.QueryString() {
@@ -43,7 +43,7 @@ func TestAndQuery(t *testing.T) {
 		}
 	}
 
-	test([]StructuredQueryTokener{
+	test([]Queryer{
 		&Near{
 			Distance: 1,
 			Boost:    1,
@@ -52,7 +52,7 @@ func TestAndQuery(t *testing.T) {
 		},
 	}, `(and (near  field='hoge'  distance=1  'fuga' ))`)
 
-	test([]StructuredQueryTokener{
+	test([]Queryer{
 		&Near{
 			Distance: 1,
 			Boost:    1,

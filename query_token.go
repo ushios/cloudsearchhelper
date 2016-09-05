@@ -5,10 +5,10 @@ import (
 	"fmt"
 )
 
-// StructuredQueryTokener output query token
+// Queryer output query token
 // see https://docs.aws.amazon.com/cloudsearch/latest/developerguide/searching-compound-queries.html
 // syntax https://docs.aws.amazon.com/cloudsearch/latest/developerguide/search-api.html#structured-search-syntax
-type StructuredQueryTokener interface {
+type Queryer interface {
 	QueryString() string
 	NotQueryString() string
 }
