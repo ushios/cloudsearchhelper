@@ -24,6 +24,11 @@ func (a *AndQuery) QueryString() string {
 	return b.String()
 }
 
+// NotQueryString for not
+func (a *AndQuery) NotQueryString() string {
+	return a.QueryString()
+}
+
 // OrQuery .
 type OrQuery struct {
 	tokens *[]StructuredQueryTokener
@@ -44,6 +49,11 @@ func (o *OrQuery) QueryString() string {
 	b.WriteString(")")
 
 	return b.String()
+}
+
+// NotQueryString for not
+func (o *OrQuery) NotQueryString() string {
+	return o.QueryString()
 }
 
 // NotQuery .
@@ -68,23 +78,28 @@ func (n *NotQuery) QueryString() string {
 	return b.String()
 }
 
+// NotQueryString for not
+func (n *NotQuery) NotQueryString() string {
+	return n.QueryString()
+}
+
 // And .
-func And(tokens *[]StructuredQueryTokener) AndQuery {
-	return AndQuery{
+func And(tokens *[]StructuredQueryTokener) *AndQuery {
+	return &AndQuery{
 		tokens: tokens,
 	}
 }
 
 // Or .
-func Or(tokens *[]StructuredQueryTokener) OrQuery {
-	return OrQuery{
+func Or(tokens *[]StructuredQueryTokener) *OrQuery {
+	return &OrQuery{
 		tokens: tokens,
 	}
 }
 
 // Not .
-func Not(tokens *[]StructuredQueryTokener) NotQuery {
-	return NotQuery{
+func Not(tokens *[]StructuredQueryTokener) *NotQuery {
+	return &NotQuery{
 		tokens: tokens,
 	}
 }

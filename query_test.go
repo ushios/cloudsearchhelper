@@ -2,6 +2,41 @@ package cloudsearchhelper
 
 import "testing"
 
+func TestQuery(t *testing.T) {
+	test := func(query StructuredQueryTokener, e string) {
+		if e != query.QueryString() {
+			t.Errorf("%v query expected (%s) but (%s)", query, e, query.QueryString())
+		}
+	}
+
+	n := Near{
+		Distance: 3,
+		Boost:    1,
+		Field:    "title",
+		Value:    "Teenage Ninja Mutant Turtles",
+	}
+
+	p := Prefix{
+		Boost: 1,
+		Field: "title",
+		Value: "Tennage Ninja Mutant Turtles",
+	}
+
+	n2 := Near{
+		Distance: 1,
+		Boost:    1,
+		Field:    "title",
+		Value:    "Star Wars",
+	}
+
+	a := And(&[]StructuredQueryTokener{&n2})
+
+	o := Or(&[]StructuredQueryTokener{&n, &p, a})
+
+	test(o, `(or (near  field='title'  distance=3  'Teenage Ninja Mutant Turtles' )(prefix  field='title'  'Tennage Ninja Mutant Turtles' )(and (near  field='title'  distance=1  'Star Wars' )))`)
+
+}
+
 func TestAndQuery(t *testing.T) {
 	test := func(tokens []StructuredQueryTokener, e string) {
 		a := And(&tokens)

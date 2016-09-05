@@ -224,7 +224,7 @@ func (r *Range) NotQueryString() string {
 type Term struct {
 	Boost int
 	Field string
-	Value string
+	Value interface{}
 }
 
 // QueryString make AND or OR query
