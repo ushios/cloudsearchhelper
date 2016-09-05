@@ -1,98 +1,90 @@
 package cloudsearchhelper
 
-import (
-	"bytes"
-	"fmt"
-)
+import "bytes"
 
-// StructuredQueryer output query
-// see https://docs.aws.amazon.com/cloudsearch/latest/developerguide/searching-compound-queries.html
-type StructuredQueryer interface {
-	QueryString() string
-	NotQueryString() string
+// AndQuery is token for and clause
+type AndQuery struct {
+	tokens *[]StructuredQueryTokener
 }
 
-// Near .
-type Near struct {
-	Distance int
-	Boost    int
-	Field    string
-	Value    string
-}
-
-// QueryString make AND or OR query
-func (n *Near) QueryString() string {
+// QueryString .
+func (a *AndQuery) QueryString() string {
 	var b bytes.Buffer
 
-	// open
-	b.WriteString("(near ")
-
-	// 対象フィールド
-	b.WriteString(fmt.Sprintf(" field='%s' ", n.Field))
-
-	// ディスタンス
-	b.WriteString(fmt.Sprintf(" distance=%d ", n.Distance))
-
-	// Boost
-	if n.Boost > 1 {
-		b.WriteString(fmt.Sprintf(" boost=%d ", n.Boost))
+	if a.tokens == nil || len(*a.tokens) == 0 {
+		return ""
 	}
 
-	// body
-	b.WriteString(fmt.Sprintf(" '%s' ", n.Value))
-
-	// close
+	b.WriteString("(and ")
+	for _, t := range *a.tokens {
+		b.WriteString(t.QueryString())
+	}
 	b.WriteString(")")
 
 	return b.String()
 }
 
-// NotQueryString make not query
-func (n *Near) NotQueryString() string {
+// OrQuery .
+type OrQuery struct {
+	tokens *[]StructuredQueryTokener
+}
+
+// QueryString .
+func (o *OrQuery) QueryString() string {
 	var b bytes.Buffer
 
-	// open
-	b.WriteString("(near ")
+	if o.tokens == nil || len(*o.tokens) == 0 {
+		return ""
+	}
 
-	// 対象フィールド
-	b.WriteString(fmt.Sprintf(" field='%s' ", n.Field))
-
-	// ディスタンス
-	b.WriteString(fmt.Sprintf(" distance=%d ", n.Distance))
-
-	// body
-	b.WriteString(fmt.Sprintf(" '%s' ", n.Value))
-
-	// close
+	b.WriteString("(or ")
+	for _, t := range *o.tokens {
+		b.WriteString(t.QueryString())
+	}
 	b.WriteString(")")
 
 	return b.String()
 }
 
-// Prefix .
-type Prefix struct {
-	Boost int
-	Field string
-	Value string
+// NotQuery .
+type NotQuery struct {
+	tokens *[]StructuredQueryTokener
 }
 
-// Phrase .
-type Phrase struct {
-	Boost int
-	Field string
-	Value string
+// QueryString .
+func (n *NotQuery) QueryString() string {
+	var b bytes.Buffer
+
+	if n.tokens == nil || len(*n.tokens) == 0 {
+		return ""
+	}
+
+	b.WriteString("(not ")
+	for _, t := range *n.tokens {
+		b.WriteString(t.NotQueryString())
+	}
+	b.WriteString(")")
+
+	return b.String()
 }
 
-// Range .
-type Range struct {
-	Boost int
-	Field string
-	Value string
+// And .
+func And(tokens *[]StructuredQueryTokener) AndQuery {
+	return AndQuery{
+		tokens: tokens,
+	}
 }
 
-// Term .
-type Term struct {
-	Boost int
-	Field string
-	Value string
+// Or .
+func Or(tokens *[]StructuredQueryTokener) OrQuery {
+	return OrQuery{
+		tokens: tokens,
+	}
+}
+
+// Not .
+func Not(tokens *[]StructuredQueryTokener) NotQuery {
+	return NotQuery{
+		tokens: tokens,
+	}
 }
