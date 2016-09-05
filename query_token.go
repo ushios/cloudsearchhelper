@@ -284,5 +284,7 @@ func valueString(v interface{}) (string, error) {
 		return "", nil
 	}
 
+	// TODO: convert to string using driver.Valuer
+
 	return "", fmt.Errorf("(%v) is not value", v)
 }
