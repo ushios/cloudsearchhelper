@@ -4,8 +4,12 @@ import "testing"
 
 func TestQuery(t *testing.T) {
 	test := func(query Queryer, e string) {
-		if e != query.QueryString() {
-			t.Errorf("%v query expected (%s) but (%s)", query, e, query.QueryString())
+		qs, err := query.QueryString()
+		if err != nil {
+			t.Fatal(err)
+		}
+		if e != qs {
+			t.Errorf("%v query expected (%s) but (%s)", query, e, qs)
 		}
 	}
 
@@ -38,8 +42,12 @@ func TestAndQuery(t *testing.T) {
 	test := func(tokens []Queryer, e string) {
 		a := And(&tokens)
 
-		if e != a.QueryString() {
-			t.Errorf("%v's query expected (%s) but (%s)", tokens, e, a.QueryString())
+		qs, err := a.QueryString()
+		if err != nil {
+			t.Fatal(err)
+		}
+		if e != qs {
+			t.Errorf("%v's query expected (%s) but (%s)", tokens, e, qs)
 		}
 	}
 

@@ -37,6 +37,9 @@ func ExampleQuery() {
 		title,
 		or,
 	})
-	fmt.Println(and.QueryString())
+
+	qs, _ := and.QueryString()
+
+	fmt.Println(qs)
 	// Output: (and (prefix  field='category'  'movie' )(phrase  field='title'  'star' )(or (term  field='genre'  'SF' )(term  field='genre'  'battle' )))
 }

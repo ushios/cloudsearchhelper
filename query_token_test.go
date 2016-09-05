@@ -4,7 +4,11 @@ import "testing"
 
 func TestNearQueryString(t *testing.T) {
 	test := func(n Near, e string) {
-		q := n.QueryString()
+		q, err := n.QueryString()
+
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		if q != e {
 			t.Errorf("%v query string expected (%s) but (%s)", n, e, q)
@@ -28,7 +32,10 @@ func TestNearQueryString(t *testing.T) {
 
 func TestNearNotQueryString(t *testing.T) {
 	test := func(n Near, e string) {
-		q := n.NotQueryString()
+		q, err := n.NotQueryString()
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		if q != e {
 			t.Errorf("%v query string expected (%s) but (%s)", n, e, q)
@@ -45,7 +52,10 @@ func TestNearNotQueryString(t *testing.T) {
 
 func TestPrefixQueryString(t *testing.T) {
 	test := func(p Prefix, e string) {
-		q := p.QueryString()
+		q, err := p.QueryString()
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		if q != e {
 			t.Errorf("%v query string expected (%s) but (%s)", p, e, q)
@@ -67,7 +77,10 @@ func TestPrefixQueryString(t *testing.T) {
 
 func TestPrefixNotQueryString(t *testing.T) {
 	test := func(p Prefix, e string) {
-		q := p.NotQueryString()
+		q, err := p.NotQueryString()
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		if q != e {
 			t.Errorf("%v query string expected (%s) but (%s)", p, e, q)
@@ -83,7 +96,10 @@ func TestPrefixNotQueryString(t *testing.T) {
 
 func TestPhraseQueryString(t *testing.T) {
 	test := func(p Phrase, e string) {
-		q := p.QueryString()
+		q, err := p.QueryString()
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		if q != e {
 			t.Errorf("%v query string expected (%s) but (%s)", p, e, q)
@@ -105,7 +121,10 @@ func TestPhraseQueryString(t *testing.T) {
 
 func TestPhraseNotQueryString(t *testing.T) {
 	test := func(p Phrase, e string) {
-		q := p.NotQueryString()
+		q, err := p.NotQueryString()
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		if q != e {
 			t.Errorf("%v query string expected (%s) but (%s)", p, e, q)

@@ -9,8 +9,8 @@ import (
 // see https://docs.aws.amazon.com/cloudsearch/latest/developerguide/searching-compound-queries.html
 // syntax https://docs.aws.amazon.com/cloudsearch/latest/developerguide/search-api.html#structured-search-syntax
 type Queryer interface {
-	QueryString() string
-	NotQueryString() string
+	QueryString() (string, error)
+	NotQueryString() (string, error)
 }
 
 // Near .
@@ -22,7 +22,7 @@ type Near struct {
 }
 
 // QueryString make AND or OR query
-func (n *Near) QueryString() string {
+func (n *Near) QueryString() (string, error) {
 	var b bytes.Buffer
 
 	// open
@@ -45,11 +45,11 @@ func (n *Near) QueryString() string {
 	// close
 	b.WriteString(")")
 
-	return b.String()
+	return b.String(), nil
 }
 
 // NotQueryString make not query
-func (n *Near) NotQueryString() string {
+func (n *Near) NotQueryString() (string, error) {
 	var b bytes.Buffer
 
 	// open
@@ -67,7 +67,7 @@ func (n *Near) NotQueryString() string {
 	// close
 	b.WriteString(")")
 
-	return b.String()
+	return b.String(), nil
 }
 
 // Prefix .
@@ -78,7 +78,7 @@ type Prefix struct {
 }
 
 // QueryString make AND or OR query
-func (p *Prefix) QueryString() string {
+func (p *Prefix) QueryString() (string, error) {
 	var b bytes.Buffer
 
 	// open
@@ -98,11 +98,11 @@ func (p *Prefix) QueryString() string {
 	// close
 	b.WriteString(")")
 
-	return b.String()
+	return b.String(), nil
 }
 
 // NotQueryString make not query
-func (p *Prefix) NotQueryString() string {
+func (p *Prefix) NotQueryString() (string, error) {
 	var b bytes.Buffer
 
 	// open
@@ -117,7 +117,7 @@ func (p *Prefix) NotQueryString() string {
 	// close
 	b.WriteString(")")
 
-	return b.String()
+	return b.String(), nil
 }
 
 // Phrase .
@@ -128,7 +128,7 @@ type Phrase struct {
 }
 
 // QueryString make AND or OR query
-func (p *Phrase) QueryString() string {
+func (p *Phrase) QueryString() (string, error) {
 	var b bytes.Buffer
 
 	// open
@@ -148,11 +148,11 @@ func (p *Phrase) QueryString() string {
 	// close
 	b.WriteString(")")
 
-	return b.String()
+	return b.String(), nil
 }
 
 // NotQueryString make not query
-func (p *Phrase) NotQueryString() string {
+func (p *Phrase) NotQueryString() (string, error) {
 	var b bytes.Buffer
 
 	// open
@@ -167,7 +167,7 @@ func (p *Phrase) NotQueryString() string {
 	// close
 	b.WriteString(")")
 
-	return b.String()
+	return b.String(), nil
 }
 
 // Range .
@@ -179,7 +179,7 @@ type Range struct {
 }
 
 // QueryString make AND or OR query
-func (r *Range) QueryString() string {
+func (r *Range) QueryString() (string, error) {
 	var b bytes.Buffer
 
 	// open
@@ -207,11 +207,11 @@ func (r *Range) QueryString() string {
 	// close
 	b.WriteString(")")
 
-	return b.String()
+	return b.String(), nil
 }
 
 // NotQueryString make not query
-func (r *Range) NotQueryString() string {
+func (r *Range) NotQueryString() (string, error) {
 	var b bytes.Buffer
 
 	// open
@@ -226,7 +226,7 @@ func (r *Range) NotQueryString() string {
 	// close
 	b.WriteString(")")
 
-	return b.String()
+	return b.String(), nil
 }
 
 // Term .
@@ -237,7 +237,7 @@ type Term struct {
 }
 
 // QueryString make AND or OR query
-func (t *Term) QueryString() string {
+func (t *Term) QueryString() (string, error) {
 	var b bytes.Buffer
 
 	// open
@@ -257,11 +257,11 @@ func (t *Term) QueryString() string {
 	// close
 	b.WriteString(")")
 
-	return b.String()
+	return b.String(), nil
 }
 
 // NotQueryString make not query
-func (t *Term) NotQueryString() string {
+func (t *Term) NotQueryString() (string, error) {
 	var b bytes.Buffer
 
 	// open
@@ -276,5 +276,13 @@ func (t *Term) NotQueryString() string {
 	// close
 	b.WriteString(")")
 
-	return b.String()
+	return b.String(), nil
+}
+
+func valueString(v interface{}) (string, error) {
+	if v == nil {
+		return "", nil
+	}
+
+	return "", fmt.Errorf("(%v) is not value", v)
 }
