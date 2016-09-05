@@ -19,4 +19,19 @@ func TestAndQuery(t *testing.T) {
 			Value:    "fuga",
 		},
 	}, `(and (near  field='hoge'  distance=1  'fuga' ))`)
+
+	test([]StructuredQueryTokener{
+		&Near{
+			Distance: 1,
+			Boost:    1,
+			Field:    "price",
+			Value:    "1000",
+		},
+		&Near{
+			Distance: 2,
+			Boost:    5,
+			Field:    "title",
+			Value:    "シン・ゴジラ",
+		},
+	}, `(and (near  field='price'  distance=1  '1000' )(near  field='title'  distance=2  boost=5  'シン・ゴジラ' ))`)
 }
