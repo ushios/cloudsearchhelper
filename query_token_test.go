@@ -80,3 +80,41 @@ func TestPrefixNotQueryString(t *testing.T) {
 		Value: "some title",
 	}, `(prefix  field='title'  'some title' )`)
 }
+
+func TestPhraseQueryString(t *testing.T) {
+	test := func(p Phrase, e string) {
+		q := p.QueryString()
+
+		if q != e {
+			t.Errorf("%v query string expected (%s) but (%s)", p, e, q)
+		}
+	}
+
+	test(Phrase{
+		Boost: 1,
+		Field: "title",
+		Value: "some title",
+	}, `(phrase  field='title'  'some title' )`)
+
+	test(Phrase{
+		Boost: 2,
+		Field: "title",
+		Value: "some title",
+	}, `(phrase  field='title'  boost=2  'some title' )`)
+}
+
+func TestPhraseNotQueryString(t *testing.T) {
+	test := func(p Phrase, e string) {
+		q := p.NotQueryString()
+
+		if q != e {
+			t.Errorf("%v query string expected (%s) but (%s)", p, e, q)
+		}
+	}
+
+	test(Phrase{
+		Boost: 2,
+		Field: "title",
+		Value: "some title",
+	}, `(phrase  field='title'  'some title' )`)
+}
