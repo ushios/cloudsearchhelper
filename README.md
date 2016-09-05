@@ -19,10 +19,11 @@ Usage
 =====
 
 - [Time](#time)
-- [StructuredQuery](#StructuredQuery)
+- [StructuredQuery](#structuredquery)
 
 
-### Time
+Time
+-------
 
 when create documents
 
@@ -45,8 +46,9 @@ fmt.Println(string(j))
 // Output: {"Name":"This is some event","StartAt":"2006-01-02T08:04:05Z"}
 ```
 
-### StructuredQuery
 
+StructuredQuery
+---------------
 
 Sorry time.Time not supported now x(
 
