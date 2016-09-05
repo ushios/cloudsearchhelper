@@ -118,3 +118,24 @@ func TestPhraseNotQueryString(t *testing.T) {
 		Value: "some title",
 	}, `(phrase  field='title'  'some title' )`)
 }
+
+// func TestRangeQueryString(t *testing.T) {
+// 	test := func(r Range, e string) {
+// 		q := r.QueryString()
+//
+// 		if q != e {
+// 			t.Errorf("%v query string expected (%s) but (%s)", r, e, q)
+// 		}
+// 	}
+//
+// 	test(Range{
+// 		Field: "rate",
+// 		From:  1,
+// 		To:    10,
+// 	}, `(phrase  field='title'  'some title' )`)
+//
+// 	test(Range{
+// 		Field: "rate",
+// 		From:  5,
+// 	}, `(phrase  field='title'  boost=2  'some title' )`)
+// }

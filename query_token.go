@@ -174,8 +174,8 @@ func (p *Phrase) NotQueryString() string {
 type Range struct {
 	Boost int
 	Field string
-	From  string
-	To    string
+	From  interface{}
+	To    interface{}
 }
 
 // QueryString make AND or OR query
@@ -194,7 +194,15 @@ func (r *Range) QueryString() string {
 	}
 
 	// body
-	b.WriteString(fmt.Sprintf(" [%s, %s] ", r.From, r.To))
+	b.WriteString("[")
+	if r.From != nil {
+		b.WriteString(fmt.Sprintf("%s", r.From))
+	}
+	b.WriteString(",")
+	if r.To != nil {
+		b.WriteString(fmt.Sprintf("%s", r.To))
+	}
+	b.WriteString("]")
 
 	// close
 	b.WriteString(")")

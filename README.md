@@ -50,7 +50,7 @@ fmt.Println(string(j))
 StructuredQuery
 ---------------
 
-Sorry time.Time not supported now x(
+Sorry time.Time, Range, Term not supported now x(
 
 example [here](https://github.com/ushios/cloudsearchhelper/blob/master/examples/query_test.go#L9-L42)
 
