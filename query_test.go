@@ -9,31 +9,28 @@ func TestQuery(t *testing.T) {
 		}
 	}
 
-	n := Near{
-		Distance: 3,
-		Boost:    1,
-		Field:    "title",
-		Value:    "Teenage Ninja Mutant Turtles",
-	}
-
-	p := Prefix{
+	title1 := Prefix{
 		Boost: 1,
 		Field: "title",
-		Value: "Tennage Ninja Mutant Turtles",
+		Value: "new",
 	}
 
-	n2 := Near{
-		Distance: 1,
-		Boost:    1,
-		Field:    "title",
-		Value:    "Star Wars",
+	title2 := Prefix{
+		Boost: 1,
+		Field: "title",
+		Value: "word",
 	}
 
-	a := And(&[]StructuredQueryTokener{&n2})
+	body1 := Prefix{
+		Boost: 1,
+		Field: "body",
+		Value: "question",
+	}
 
-	o := Or(&[]StructuredQueryTokener{&n, &p, a})
+	o := Or(&[]StructuredQueryTokener{&title1, &title2})
+	a := And(&[]StructuredQueryTokener{&body1, o})
 
-	test(o, `(or (near  field='title'  distance=3  'Teenage Ninja Mutant Turtles' )(prefix  field='title'  'Tennage Ninja Mutant Turtles' )(and (near  field='title'  distance=1  'Star Wars' )))`)
+	test(a, `(and (prefix  field='body'  'question' )(or (prefix  field='title'  'new' )(prefix  field='title'  'word' )))`)
 
 }
 
