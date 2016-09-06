@@ -93,5 +93,5 @@ func TestNotQuery(t *testing.T) {
 			Field: "title",
 			Value: "Star Wars",
 		},
-	}, `not (phrase  field='title'  'Star Wars' ))`)
+	}, `(not (phrase  field='title'  'Star Wars' ))`)
 }
